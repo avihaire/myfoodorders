@@ -4,7 +4,7 @@ body {
     font-family: Arial, sans-serif;
     background-color: #f0f0f0;
     direction: rtl;
-    font-size: 3rem; /* גודל בסיס גדול יותר */
+    font-size: 2rem; /* גודל בסיס גדול יותר */
 }
 
 /* עיצוב הניווט */
@@ -26,7 +26,7 @@ body {
     text-decoration: none;
     color: white;
     font-weight: bold;
-    font-size: 3.5rem; /* טקסט גדול יותר */
+    font-size: 2.5rem; /* טקסט גדול יותר */
     transition: color 0.3s;
 }
 
@@ -46,7 +46,7 @@ body {
     margin: 20px;
     border-radius: 10px;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    font-size: 4rem; /* טקסט גדול יותר */
+    font-size: 2.5rem; /* טקסט גדול יותר */
 }
 
 /* כפתורי הזמנה */
@@ -55,13 +55,13 @@ body {
     width: 100%;
     max-width: 600px;
     margin: 20px auto;
-    padding: 50px; /* כפתור גדול יותר */
+    padding: 35px; /* כפתור גדול יותר */
     background-color: #4CAF50;
     color: white;
     border: none;
     border-radius: 12px;
     cursor: pointer;
-    font-size: 4rem; /* טקסט גדול יותר */
+    font-size: 3rem; /* טקסט גדול יותר */
     transition: background-color 0.3s ease;
 }
 
@@ -70,22 +70,34 @@ body {
 }
 
 /* סגנונות לחלון הקופץ (modal) */
+.modal {
+    display: none;
+    position: fixed;
+    z-index: 1;
+    left: 0;
+    top: 0;
+    width: 100%;
+    height: 100%;
+    overflow: auto;
+    background-color: rgba(0, 0, 0, 0.5);
+}
+
 .modal-content {
     background-color: #ffffff;
-    margin: 25% auto;
+    margin: 30% auto;
     padding: 40px;
     border: 1px solid #888;
     width: 95%;
     max-width: 500px;
     text-align: center;
     border-radius: 15px;
-    font-size: 3.5rem; /* טקסט גדול יותר */
+    font-size: 2.5rem; /* טקסט גדול יותר */
 }
 
 .close {
     color: #aaa;
     float: right;
-    font-size: 5rem; /* טקסט גדול יותר */
+    font-size: 4rem; /* טקסט גדול יותר */
     cursor: pointer;
 }
 
@@ -97,7 +109,7 @@ body {
 .progress-bar {
     width: 100%;
     max-width: 600px;
-    height: 50px;
+    height: 40px;
     background-color: #e0e0e0;
     border-radius: 20px;
     overflow: hidden;
@@ -114,54 +126,53 @@ body {
 /* התאמות למובייל */
 @media (max-width: 768px) {
     .container {
-        padding: 40px;
+        padding: 30px;
         margin: 10px;
-        font-size: 4rem;
+        font-size: 3rem;
     }
 
     .order-button {
-        font-size: 4.5rem;
-        padding: 50px;
+        font-size: 3.5rem;
+        padding: 40px;
     }
 
     .navbar a {
-        font-size: 4rem;
+        font-size: 2.5rem;
     }
 
     .modal-content {
-        padding: 40px;
+        padding: 30px;
         width: 95%;
     }
 
     .progress-bar {
-        height: 45px;
+        height: 35px;
     }
 }
 
 @media (max-width: 480px) {
     .navbar {
         flex-direction: column;
-        padding: 20px;
+        padding: 15px;
     }
 
     .navbar a {
         margin: 10px 0;
-        font-size: 4.5rem;
+        font-size: 2.5rem;
     }
 
     .order-button {
-        font-size: 5rem;
-        padding: 60px;
+        font-size: 3.2rem;
+        padding: 30px;
     }
 
     .modal-content {
-        padding: 35px;
-        margin: 20% auto;
+        padding: 25px;
+        margin: 25% auto;
         width: 90%;
-        font-size: 4rem;
     }
 
     .progress-bar {
-        height: 50px;
+        height: 30px;
     }
 }
