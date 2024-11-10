@@ -9,6 +9,7 @@ body {
 /* עיצוב הניווט */
 .navbar {
     display: flex;
+    flex-wrap: wrap;
     justify-content: center;
     align-items: center;
     background-color: #4CAF50;
@@ -50,16 +51,16 @@ body {
 /* כפתורי הזמנה */
 .order-button {
     display: block;
-    width: 90%;
-    max-width: 400px;
+    width: 100%;
+    max-width: 500px;
     margin: 10px auto;
-    padding: 12px;
+    padding: 14px;
     background-color: #4CAF50;
     color: white;
     border: none;
     border-radius: 8px;
     cursor: pointer;
-    font-size: 1rem;
+    font-size: 1.1rem;
     transition: background-color 0.3s ease;
 }
 
@@ -82,7 +83,7 @@ body {
 
 .modal-content {
     background-color: #ffffff;
-    margin: 10% auto;
+    margin: 20% auto;
     padding: 20px;
     border: 1px solid #888;
     width: 90%;
@@ -94,7 +95,7 @@ body {
 .close {
     color: #aaa;
     float: right;
-    font-size: 28px;
+    font-size: 1.5rem;
     cursor: pointer;
 }
 
@@ -105,10 +106,10 @@ body {
 /* בר התקדמות */
 .progress-bar {
     width: 100%;
-    max-width: 400px;
-    height: 20px;
+    max-width: 500px;
+    height: 24px;
     background-color: #e0e0e0;
-    border-radius: 10px;
+    border-radius: 12px;
     overflow: hidden;
     margin: 20px 0;
 }
@@ -134,39 +135,45 @@ body {
 
     .order-button {
         width: 100%;
-        font-size: 0.9rem;
-        padding: 10px;
+        font-size: 1rem;
+        padding: 12px;
     }
 
     .modal-content {
         width: 95%;
-        margin: 20% auto;
-        padding: 15px;
+        margin: 15% auto;
+        padding: 18px;
     }
 
     .progress-bar {
-        width: 100%;
-        height: 18px;
+        height: 20px;
     }
 }
 
 @media (max-width: 480px) {
     .navbar {
         flex-direction: column;
-        padding: 5px;
+        padding: 8px;
     }
 
     .navbar a {
-        margin: 5px 0;
+        margin: 8px 0;
+        font-size: 0.8rem;
     }
 
     .order-button {
         width: 100%;
-        font-size: 0.8rem;
-        padding: 8px;
+        font-size: 0.9rem;
+        padding: 10px;
+    }
+
+    .modal-content {
+        width: 90%;
+        margin: 20% auto;
+        padding: 15px;
     }
 
     .progress-bar {
-        height: 16px;
+        height: 18px;
     }
 }
