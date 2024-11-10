@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="he">
+<head>
+    <meta charset="UTF-8">
+    <title>היסטוריית הזמנות</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+    <div id="navbar"></div>
+    <script>
+        // טעינת הניווט מקובץ navbar.html
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('navbar').innerHTML = data);
+    </script>
+    
+
+    <div class="container">
+        <h1>היסטוריית הזמנות</h1>
+        <table id="history-table">
+            <tr>
+                <th>תאריך</th>
+                <th>סוג הזמנה</th>
+                <th>סכום</th>
+            </tr>
+        </table>
+        <button onclick="clearHistory()">נקה היסטוריה</button>
+    </div>
+
+
+    
+    <script src="history.js"></script>
+</body>
+</html>
