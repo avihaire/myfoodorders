@@ -2,37 +2,32 @@
 <html lang="he">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>כרטיסיית הזמנות</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
-    <!-- ניווט -->
     <div id="navbar"></div>
     <script>
-        // טעינת הניווט מקובץ navbar.html
         fetch('navbar.html')
             .then(response => response.text())
             .then(data => document.getElementById('navbar').innerHTML = data);
     </script>
 
+    <!-- טעינת ספריות Firebase -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+
     <div class="container">
         <h1>כרטיסיית הזמנות</h1>
         <p>נותרו לך <span id="remaining-count">3</span> ניקובים לשבוע</p>
-
-        <!-- הצגת התקציב השבועי והתקדמות -->
         <p>תקציב שבועי: <span id="weekly-budget-display">0</span> ₪</p>
         <p>הוצאת עד כה: <span id="current-spent-display">0</span> ₪</p>
         <p>נותר לך להשתמש: <span id="remaining-budget-display">0</span> ₪</p>
-
         <div class="progress-bar">
             <div id="progress-fill"></div>
         </div>
-
-        <!-- אזור כפתורי ההזמנה -->
         <div id="buttons-container"></div>
-
-        <!-- חלון קופץ להזנת סכום -->
         <div id="modal" class="modal">
             <div class="modal-content">
                 <span class="close" onclick="closeModal()">&times;</span>
@@ -43,7 +38,6 @@
         </div>
     </div>
 
-    <!-- קובץ JavaScript -->
     <script src="script.js"></script>
 </body>
 </html>

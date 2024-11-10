@@ -78,31 +78,63 @@ body {
     top: 0;
     width: 100%;
     height: 100%;
-    overflow: auto;
     background-color: rgba(0, 0, 0, 0.5);
+    justify-content: center;
+    align-items: center;
+}
+
+.modal.active {
+    display: flex;
 }
 
 .modal-content {
     background-color: #ffffff;
-    margin: 30% auto;
-    padding: 40px;
+    padding: 30px;
     border: 1px solid #888;
-    width: 95%;
-    max-width: 500px;
-    text-align: center;
     border-radius: 15px;
-    font-size: 2.5rem; /* טקסט גדול יותר */
+    text-align: center;
+    width: 90%;
+    max-width: 500px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    font-size: 2rem;
 }
 
 .close {
     color: #aaa;
-    float: right;
-    font-size: 4rem; /* טקסט גדול יותר */
+    font-size: 3rem;
     cursor: pointer;
+    position: absolute;
+    top: 10px;
+    right: 20px;
 }
 
 .close:hover {
     color: #000;
+}
+
+input[type="number"] {
+    width: 100%;
+    padding: 15px;
+    margin: 20px 0;
+    border: 1px solid #ccc;
+    border-radius: 10px;
+    font-size: 2rem;
+}
+
+button {
+    width: 100%;
+    padding: 15px;
+    background-color: #4CAF50;
+    color: white;
+    border: none;
+    border-radius: 10px;
+    font-size: 2.5rem;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+}
+
+button:hover {
+    background-color: #45a049;
 }
 
 /* בר התקדמות */
@@ -126,53 +158,63 @@ body {
 /* התאמות למובייל */
 @media (max-width: 768px) {
     .container {
-        padding: 30px;
+        padding: 20px;
         margin: 10px;
-        font-size: 3rem;
-    }
-
-    .order-button {
-        font-size: 3.5rem;
-        padding: 40px;
-    }
-
-    .navbar a {
         font-size: 2.5rem;
     }
 
+    .order-button {
+        font-size: 3rem;
+        padding: 25px;
+    }
+
+    .navbar a {
+        font-size: 2rem;
+    }
+
     .modal-content {
-        padding: 30px;
+        padding: 20px;
         width: 95%;
     }
 
     .progress-bar {
-        height: 35px;
+        height: 30px;
     }
 }
 
 @media (max-width: 480px) {
     .navbar {
         flex-direction: column;
-        padding: 15px;
+        padding: 10px;
     }
 
     .navbar a {
-        margin: 10px 0;
-        font-size: 2.5rem;
+        margin: 5px 0;
+        font-size: 2rem;
     }
 
     .order-button {
-        font-size: 3.2rem;
-        padding: 30px;
+        font-size: 2.8rem;
+        padding: 20px;
     }
 
     .modal-content {
-        padding: 25px;
-        margin: 25% auto;
+        padding: 15px;
+        margin: 20% auto;
         width: 90%;
     }
 
+    input[type="number"] {
+        font-size: 1.8rem;
+        padding: 10px;
+    }
+
+    button {
+        font-size: 2rem;
+        padding: 10px;
+    }
+
     .progress-bar {
-        height: 30px;
+        height: 25px;
     }
 }

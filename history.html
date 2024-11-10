@@ -2,20 +2,22 @@
 <html lang="he">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>היסטוריית הזמנות</title>
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-
     <div id="navbar"></div>
+
+     <!-- טעינת ספריות Firebase -->
+     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+     <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
+ 
     <script>
-        // טעינת הניווט מקובץ navbar.html
         fetch('navbar.html')
             .then(response => response.text())
             .then(data => document.getElementById('navbar').innerHTML = data);
     </script>
-    
-
     <div class="container">
         <h1>היסטוריית הזמנות</h1>
         <table id="history-table">
@@ -27,9 +29,6 @@
         </table>
         <button onclick="clearHistory()">נקה היסטוריה</button>
     </div>
-
-
-    
     <script src="history.js"></script>
 </body>
 </html>

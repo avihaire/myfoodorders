@@ -2,34 +2,34 @@
 <html lang="he">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>הגדרות כרטיסיה</title>
     <link rel="stylesheet" href="style.css">
+    
+    <!-- הוספת ספריות Firebase מה-CDN -->
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-app.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.10.0/firebase-firestore.js"></script>
 </head>
 <body>
-
     <div id="navbar"></div>
-<script>
-    // טעינת הניווט מקובץ navbar.html
-    fetch('navbar.html')
-        .then(response => response.text())
-        .then(data => document.getElementById('navbar').innerHTML = data);
-</script>
+    <script>
+        fetch('navbar.html')
+            .then(response => response.text())
+            .then(data => document.getElementById('navbar').innerHTML = data);
+    </script>
 
     <div class="container">
         <h1>הגדרות כרטיסיה</h1>
 
-        <!-- הגדרת כמות ניקובים לשבוע -->
         <label for="max-orders">כמות הזמנות שבועיות:</label>
         <input type="number" id="max-orders" min="1" value="3">
         <button onclick="saveMaxOrders()">שמור</button>
 
-           <!-- הגדרת סכום שבועי -->
-           <h2>הגדרת סכום שבועי</h2>
-           <label for="weekly-budget">סכום שבועי בשקלים:</label>
-           <input type="number" id="weekly-budget" min="0" value="0">
-           <button onclick="saveWeeklyBudget()">שמור סכום שבועי</button>
+        <h2>הגדרת סכום שבועי</h2>
+        <label for="weekly-budget">סכום שבועי בשקלים:</label>
+        <input type="number" id="weekly-budget" min="0" value="0">
+        <button onclick="saveWeeklyBudget()">שמור סכום שבועי</button>
 
-        <!-- עריכת שמות כפתורים -->
         <h2>עריכת כפתורים:</h2>
         <div id="buttons-container"></div>
         <button onclick="addNewButton()">הוסף כפתור חדש</button>

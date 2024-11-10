@@ -1,21 +1,59 @@
-document.addEventListener('DOMContentLoaded', () => {
-    loadSettings();
-    loadButtons();
+// אתחול Firebase
+const firebaseConfig = {
+    apiKey: "AIza...",
+    authDomain: "foodoutside-60619.firebaseapp.com",
+    databaseURL: "https://foodoutside-60619-default-rtdb.europe-west1.firebasedatabase.app",
+    projectId: "foodoutside-60619",
+    storageBucket: "foodoutside-60619.appspot.com",
+    messagingSenderId: "394412781354",
+    appId: "1:394412781354:web:bb6065257d9678c4427853"
+};
+
+// בדוק אם Firebase כבר מאותחל
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+
+const db = firebase.firestore();
+
+// קריאת נתונים מ-Firebase בעת טעינת העמוד
+document.addEventListener('DOMContentLoaded', async () => {
+    await loadSettings();
+    await loadButtons();
 });
 
-// טעינת ההגדרות
-function loadSettings() {
-    // טעינת כמות הניקובים השבועית
-    const maxOrders = localStorage.getItem('maxOrders') || 3;
-    document.getElementById('max-orders').value = maxOrders;
+// פונקציה לשמירת נתונים ל-Firebase
+async function saveData(key, value) {
+    try {
+        await db.collection('settings').doc(key).set({ value });
+        console.log(`Saved ${key}: ${value}`);
+    } catch (error) {
+        console.error("Error saving data:", error);
+    }
+}
 
-    // טעינת הסכום השבועי
-    const weeklyBudget = localStorage.getItem('weeklyBudget') || 0;
+// פונקציה לטעינת נתונים מ-Firebase
+async function loadData(key) {
+    try {
+        const doc = await db.collection('settings').doc(key).get();
+        return doc.exists ? doc.data().value : null;
+    } catch (error) {
+        console.error("Error loading data:", error);
+        return null;
+    }
+}
+
+// טעינת ההגדרות
+async function loadSettings() {
+    const maxOrders = await loadData('maxOrders') || 3;
+    const weeklyBudget = await loadData('weeklyBudget') || 0;
+
+    document.getElementById('max-orders').value = maxOrders;
     document.getElementById('weekly-budget').value = weeklyBudget;
 }
 
 // שמירת כמות הניקובים בהגדרות
-function saveMaxOrders() {
+window.saveMaxOrders = async function() {
     const maxOrders = parseInt(document.getElementById('max-orders').value);
 
     if (isNaN(maxOrders) || maxOrders <= 0) {
@@ -23,38 +61,29 @@ function saveMaxOrders() {
         return;
     }
 
-    localStorage.setItem('maxOrders', maxOrders);
-    localStorage.setItem('remainingOrders', maxOrders);
-    updateRemainingOrdersDisplay();
+    await saveData('maxOrders', maxOrders);
+    await saveData('remainingOrders', maxOrders);
     alert('כמות הניקובים נשמרה בהצלחה!');
     window.location.reload();
-}
+};
 
 // שמירת הסכום השבועי
-function saveWeeklyBudget() {
+window.saveWeeklyBudget = async function() {
     const weeklyBudget = parseFloat(document.getElementById('weekly-budget').value);
-    localStorage.setItem('weeklyBudget', weeklyBudget);
-    localStorage.setItem('currentSpent', 0);
+    if (isNaN(weeklyBudget) || weeklyBudget < 0) {
+        alert("נא להזין סכום תקין");
+        return;
+    }
+
+    await saveData('weeklyBudget', weeklyBudget);
+    await saveData('currentSpent', 0);
     alert('הסכום השבועי נשמר בהצלחה!');
     window.location.reload();
-}
+};
 
-// עדכון תצוגת הניקובים בעמוד הראשי (אם פתוח)
-function updateRemainingOrdersDisplay() {
-    const remainingCount = document.getElementById('remaining-count');
-    if (remainingCount) {
-        const remainingOrders = localStorage.getItem('remainingOrders');
-        remainingCount.textContent = remainingOrders;
-    }
-}
-
-// טעינת כפתורים מדף ההגדרות
-function loadButtons() {
-    const buttons = JSON.parse(localStorage.getItem('buttons')) || [
-        { label: 'הזמנה אלה' },
-        { label: 'הזמנה אביחי' },
-        { label: 'הזמנה משותפת' }
-    ];
+// טעינת כפתורים מ-Firebase
+async function loadButtons() {
+    const buttons = await loadData('buttons') || [];
     renderButtons(buttons);
 }
 
@@ -80,26 +109,28 @@ function renderButtons(buttons) {
         div.appendChild(removeBtn);
         container.appendChild(div);
     });
-
-    localStorage.setItem('buttons', JSON.stringify(buttons));
 }
 
-function updateButtonLabel(index, newLabel) {
-    const buttons = JSON.parse(localStorage.getItem('buttons'));
+// פונקציה לעדכון שם הכפתור
+window.updateButtonLabel = async function(index, newLabel) {
+    const buttons = await loadData('buttons') || [];
     buttons[index].label = newLabel;
-    localStorage.setItem('buttons', JSON.stringify(buttons));
-}
+    await saveData('buttons', buttons);
+    renderButtons(buttons);
+};
 
-function addNewButton() {
-    const buttons = JSON.parse(localStorage.getItem('buttons')) || [];
+// פונקציה להוספת כפתור חדש
+window.addNewButton = async function() {
+    const buttons = await loadData('buttons') || [];
     buttons.push({ label: 'כפתור חדש' });
-    localStorage.setItem('buttons', JSON.stringify(buttons));
+    await saveData('buttons', buttons);
     renderButtons(buttons);
-}
+};
 
-function removeButton(index) {
-    const buttons = JSON.parse(localStorage.getItem('buttons'));
+// פונקציה למחיקת כפתור
+window.removeButton = async function(index) {
+    const buttons = await loadData('buttons') || [];
     buttons.splice(index, 1);
-    localStorage.setItem('buttons', JSON.stringify(buttons));
+    await saveData('buttons', buttons);
     renderButtons(buttons);
-}
+};

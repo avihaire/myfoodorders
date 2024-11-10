@@ -1,34 +1,92 @@
-// אתחול של מספר הניקובים מה-Local Storage או ברירת מחדל ל-3
-let remainingOrders = localStorage.getItem('remainingOrders') !== null 
-    ? parseInt(localStorage.getItem('remainingOrders')) 
-    : parseInt(localStorage.getItem('maxOrders')) || 3;
+// אתחול Firebase
+const firebaseConfig = {
+    apiKey: "AIza...",
+    authDomain: "foodoutside-60619.firebaseapp.com",
+    projectId: "foodoutside-60619",
+    storageBucket: "foodoutside-60619.appspot.com",
+    messagingSenderId: "394412781354",
+    appId: "1:394412781354:web:bb6065257d9678c4427853"
+};
 
-let weeklyBudget = parseFloat(localStorage.getItem('weeklyBudget')) || 0;
-let currentSpent = parseFloat(localStorage.getItem('currentSpent')) || 0;
+// אתחול Firebase
+if (!firebase.apps.length) {
+    firebase.initializeApp(firebaseConfig);
+}
+const db = firebase.firestore();
 
-const remainingBudgetDisplay = document.getElementById('remaining-budget-display');
-const remainingCount = document.getElementById('remaining-count');
-const modal = document.getElementById('modal');
-const modalTitle = document.getElementById('modal-title');
-const orderAmount = document.getElementById('order-amount');
-const weeklyBudgetDisplay = document.getElementById('weekly-budget-display');
-const currentSpentDisplay = document.getElementById('current-spent-display');
-const progressBarFill = document.getElementById('progress-fill');
+let remainingOrders, weeklyBudget, currentSpent, lastResetDate;
 const buttonsContainer = document.getElementById('buttons-container');
+const progressBarFill = document.getElementById('progress-fill');
 
-let selectedOrderType = '';
+// קריאה לנתונים בעת טעינת העמוד
+document.addEventListener('DOMContentLoaded', async () => {
+    await initializeData();
+    await resetWeekly(); // איפוס שבועי ביום ראשון
+    updateDisplay();
+});
 
-// פונקציה לטעינת כפתורים מדף ההגדרות
-function loadButtons() {
-    const buttons = JSON.parse(localStorage.getItem('buttons')) || [];
-    
-    // בדיקה אם אין כפתורים שמורים, אל תציג כלום
-    if (buttons.length === 0) {
-        buttonsContainer.innerHTML = '<p>אין כפתורים זמינים. הגדר כפתורים בהגדרות.</p>';
-        return;
+// פונקציה לאתחול נתונים בעת טעינת העמוד
+async function initializeData() {
+    await loadData();
+    await loadButtons();
+}
+
+// קריאת נתונים מה-Firebase
+async function loadData() {
+    remainingOrders = await loadFromFirebase('remainingOrders') || 3;
+    weeklyBudget = await loadFromFirebase('weeklyBudget') || 0;
+    currentSpent = await loadFromFirebase('currentSpent') || 0;
+    lastResetDate = await loadFromFirebase('lastResetDate');
+}
+
+// שמירת נתונים ל-Firebase
+async function saveToFirebase(key, value) {
+    try {
+        await db.collection('settings').doc(key).set({ value });
+    } catch (error) {
+        console.error("Error saving to Firebase:", error);
     }
-    
+}
+
+// טעינת נתונים מ-Firebase
+async function loadFromFirebase(key) {
+    try {
+        const doc = await db.collection('settings').doc(key).get();
+        return doc.exists ? doc.data().value : null;
+    } catch (error) {
+        console.error("Error loading from Firebase:", error);
+        return null;
+    }
+}
+
+// פונקציה לאיפוס שבועי
+async function resetWeekly() {
+    const now = new Date();
+    const currentDay = now.getDay(); // יום ראשון = 0
+
+    // בדיקה אם היום הוא יום ראשון ואם כבר בוצע איפוס היום
+    if (currentDay === 0 && (!lastResetDate || new Date(lastResetDate).toDateString() !== now.toDateString())) {
+        remainingOrders = await loadFromFirebase('maxOrders') || 3;
+        currentSpent = 0;
+
+        await saveToFirebase('remainingOrders', remainingOrders);
+        await saveToFirebase('currentSpent', currentSpent);
+        await saveToFirebase('lastResetDate', now.toDateString());
+
+        alert("הכרטיסייה התחדשה לשבוע חדש!");
+    }
+}
+
+// טעינת כפתורים מה-Firebase
+async function loadButtons() {
+    const buttons = await loadFromFirebase('buttons') || [];
+    renderButtons(buttons);
+}
+
+// הצגת הכפתורים בעמוד
+function renderButtons(buttons) {
     buttonsContainer.innerHTML = '';
+
     buttons.forEach(button => {
         const orderButton = document.createElement('button');
         orderButton.className = 'order-button';
@@ -38,111 +96,68 @@ function loadButtons() {
     });
 }
 
-// פונקציה לאיפוס שבועי ביום ראשון בלבד
-function resetWeekly() {
-    const now = new Date();
-    const lastReset = localStorage.getItem('lastResetDate');
-    const currentDay = now.getDay(); // יום ראשון = 0
-
-    if (currentDay === 0) {
-        const lastResetDate = new Date(lastReset);
-        if (!lastReset || now.toDateString() !== lastResetDate.toDateString()) {
-            remainingOrders = parseInt(localStorage.getItem('maxOrders')) || 3;
-            localStorage.setItem('remainingOrders', remainingOrders);
-            
-            currentSpent = 0;
-            localStorage.setItem('currentSpent', currentSpent);
-
-            localStorage.setItem('lastResetDate', now.toDateString());
-            alert("הניקובים והתקציב התחדשו לשבוע חדש!");
-            updateDisplay();
-        }
-    }
-}
-
-// פונקציה לעדכון התצוגה של מספר הניקובים והתקציב
+// פונקציה לעדכון התצוגה של מספר הניקובים, התקציב ובר ההתקדמות
 function updateDisplay() {
-    remainingCount.textContent = remainingOrders;
-    weeklyBudgetDisplay.textContent = weeklyBudget.toFixed(2);
-    currentSpentDisplay.textContent = currentSpent.toFixed(2);
+    document.getElementById('remaining-count').textContent = remainingOrders;
+    document.getElementById('weekly-budget-display').textContent = weeklyBudget.toFixed(2);
+    document.getElementById('current-spent-display').textContent = currentSpent.toFixed(2);
+    document.getElementById('remaining-budget-display').textContent = (weeklyBudget - currentSpent).toFixed(2);
 
-    // חישוב הסכום שנותר מתוך התקציב השבועי
-    const remainingBudget = weeklyBudget - currentSpent;
-    remainingBudgetDisplay.textContent = remainingBudget.toFixed(2);
-
-    // עדכון בר התקדמות
     updateProgressBar();
-
-    // אם נגמרו הניקובים, הצג 0
-    if (remainingOrders <= 0) {
-        remainingCount.textContent = "0";
-    }
 }
 
-// פונקציה לעדכון בר התקדמות של התקציב
+// פונקציה לעדכון בר ההתקדמות
 function updateProgressBar() {
     const percentage = (currentSpent / weeklyBudget) * 100;
     progressBarFill.style.width = `${Math.min(percentage, 100)}%`;
-    
-    if (currentSpent > weeklyBudget) {
-        progressBarFill.style.backgroundColor = 'red';
-    } else {
-        progressBarFill.style.backgroundColor = '#4CAF50';
-    }
+
+    progressBarFill.style.backgroundColor = currentSpent > weeklyBudget ? 'red' : '#4CAF50';
 }
 
-// פתיחת חלון קופץ להזמנה
-window.openModal = function(orderType) {
-    if (remainingOrders > 0) {
-        selectedOrderType = orderType;
-        modalTitle.textContent = `הזמנה ${orderType}`;
-        modal.style.display = 'block';
-    } else {
-        alert("ניצלת את כל ההזמנות לשבוע זה!");
-    }
-}
-
-// סגירת חלון קופץ
-window.closeModal = function() {
-    modal.style.display = 'none';
-    orderAmount.value = '';
-}
-
-// פונקציה לביצוע הזמנה והפחתת ניקוב
-window.submitOrder = function() {
-    const amount = parseFloat(orderAmount.value);
-    if (isNaN(amount) || amount <= 0) {
-        alert("נא להזין סכום תקין");
-        return;
-    }
-
-    if (remainingOrders > 0) {
-        remainingOrders--;
-        localStorage.setItem('remainingOrders', remainingOrders);
-
-        currentSpent += amount;
-        localStorage.setItem('currentSpent', currentSpent);
-        
-        saveHistory(selectedOrderType, amount);
-        updateDisplay();
-    }
-    closeModal();
-}
-
-// שמירת היסטוריית הזמנות
-function saveHistory(orderType, amount) {
-    const history = JSON.parse(localStorage.getItem('orderHistory')) || [];
-    history.push({
+// פונקציה לשמירת היסטוריית הזמנה ב-Firebase
+async function saveOrderHistory(orderType, amount) {
+    const history = await loadFromFirebase('orderHistory') || [];
+    const newEntry = {
         type: orderType,
         amount: amount,
         date: new Date().toLocaleDateString('he-IL')
-    });
-    localStorage.setItem('orderHistory', JSON.stringify(history));
+    };
+    history.push(newEntry);
+    await saveToFirebase('orderHistory', history);
 }
+// פונקציות לפתיחת וסגירת מודאל
+window.openModal = function (type) {
+    const modalTitle = document.getElementById('modal-title');
+    const modal = document.getElementById('modal');
 
-// קריאה לפונקציות בעת טעינת העמוד
-document.addEventListener('DOMContentLoaded', () => {
-    resetWeekly();
-    loadButtons();
+    if (modal && modalTitle) {
+        modalTitle.textContent = `הזמנה ${type}`;
+        modal.classList.add('active'); // הוספת מחלקה 'active'
+    }
+};
+
+window.closeModal = function () {
+    const modal = document.getElementById('modal');
+    if (modal) {
+        modal.classList.remove('active'); // הסרת מחלקה 'active'
+        document.getElementById('order-amount').value = '';
+    }
+}
+// פונקציה לביצוע הזמנה
+window.submitOrder = async function () {
+    const amount = parseFloat(document.getElementById('order-amount').value);
+    const orderType = document.getElementById('modal-title').textContent;
+
+    if (isNaN(amount) || amount <= 0) return;
+
+    remainingOrders--;
+    currentSpent += amount;
+
+    await saveToFirebase('remainingOrders', remainingOrders);
+    await saveToFirebase('currentSpent', currentSpent);
+
+    await saveOrderHistory(orderType, amount);
+
     updateDisplay();
-});
+    closeModal();
+};
