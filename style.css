@@ -35,7 +35,7 @@ body {
     text-decoration: none;
     color: white;
     font-weight: 600;
-    font-size: 16px;
+    font-size: 20px;
     transition: color 0.3s;
 }
 
@@ -217,7 +217,7 @@ button:hover {
     }
 
     .order-button {
-        font-size: 14px;
+        font-size: 16px;
         padding: 10px 15px;
     }
 
@@ -228,12 +228,12 @@ button:hover {
 
     input[type="number"],
     #buttons-container input[type="text"] {
-        font-size: 14px;
+        font-size: 16px;
         padding: 10px;
     }
 
     button {
-        font-size: 14px;
+        font-size: 16px;
         padding: 10px;
     }
 }
@@ -262,3 +262,137 @@ button:hover {
 #history-table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
+/* עיצוב מגניב לתאריך ולשעה */
+.date-time-container {
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+    gap: 15px; /* רווח בין התאריך והשעה */
+    margin-bottom: 20px;
+    font-size: 18px;
+    color: #00B6DB;
+    font-family: 'Open Sans', sans-serif;
+}
+
+#current-date {
+    background-color: #E0F7FA;
+    padding: 8px 12px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+}
+
+#current-time {
+    background-color: #FFECB3;
+    padding: 8px 12px;
+    border-radius: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    font-weight: 600;
+    animation: pulse 1s infinite alternate;
+}
+
+/* אפקט פועם לשעה */
+@keyframes pulse {
+    0% {
+        transform: scale(1);
+        background-color: #FFECB3;
+    }
+    100% {
+        transform: scale(1.05);
+        background-color: #FFD54F;
+    }
+}
+
+/* אזור האנימציה */
+.bubbles-container {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    z-index: -1; /* מאחורי התוכן */
+    pointer-events: none; /* כדי שלא יפריע ללחיצות */
+}
+
+.bubble {
+    position: absolute;
+    bottom: -50px;
+    width: 40px;
+    height: 40px;
+    background-color: #00B6DB; /* צבע כחול (ברירת מחדל) */
+    opacity: 0.8;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-size: 24px;
+    font-weight: bold;
+    animation: floatUp 15s infinite ease-in-out;
+    box-shadow: 0 8px 15px rgba(0, 0, 0, 0.2); /* צל */
+}
+
+/* בועות בצבעים שונים */
+.bubble:nth-child(2) {
+    width: 50px;
+    height: 50px;
+    left: 10%;
+    background-color: #FF4081; /* ורוד */
+    animation-duration: 12s;
+    animation-delay: 2s;
+}
+
+.bubble:nth-child(3) {
+    width: 45px;
+    height: 45px;
+    left: 25%;
+    background-color: #8E44AD; /* מג'נטה */
+    animation-duration: 8s;
+    animation-delay: 4s;
+}
+
+.bubble:nth-child(4) {
+    width: 60px;
+    height: 60px;
+    left: 50%;
+    background-color: #2ECC71; /* ירוק */
+    animation-duration: 18s;
+    animation-delay: 1s;
+}
+
+.bubble:nth-child(5) {
+    width: 55px;
+    height: 55px;
+    left: 75%;
+    background-color: #F39C12; /* כתום */
+    animation-duration: 10s;
+    animation-delay: 6s;
+}
+
+.bubble:nth-child(6) {
+    width: 40px;
+    height: 40px;
+    left: 90%;
+    background-color: #9B59B6; /* סגול */
+    animation-duration: 7s;
+    animation-delay: 3s;
+}
+
+/* אפקט עליית הבועות */
+@keyframes floatUp {
+    0% {
+        transform: translateY(0) scale(1);
+        opacity: 0.8;
+    }
+    50% {
+        transform: translateY(-200px) scale(1.3);
+        opacity: 1;
+    }
+    100% {
+        transform: translateY(-600px) scale(0.5);
+        opacity: 0;
+    }
+}
+

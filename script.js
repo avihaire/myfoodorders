@@ -21,7 +21,7 @@ const progressBarFill = document.getElementById('progress-fill');
 // קריאה לנתונים בעת טעינת העמוד
 document.addEventListener('DOMContentLoaded', async () => {
     await initializeData();
-    await resetWeekly(); // איפוס שבועי ביום ראשון
+    await checkResetConditions();
     updateDisplay();
 });
 
@@ -33,10 +33,16 @@ async function initializeData() {
 
 // קריאת נתונים מה-Firebase
 async function loadData() {
-    remainingOrders = await loadFromFirebase('remainingOrders') || 3;
+    remainingOrders = await loadFromFirebase('remainingOrders');
     weeklyBudget = await loadFromFirebase('weeklyBudget') || 0;
     currentSpent = await loadFromFirebase('currentSpent') || 0;
     lastResetDate = await loadFromFirebase('lastResetDate');
+
+    // אם אין ערך מוגדר עבור remainingOrders, נאתחל ל-3
+    if (remainingOrders === null) {
+        remainingOrders = 3;
+        await saveToFirebase('remainingOrders', remainingOrders);
+    }
 }
 
 // שמירת נתונים ל-Firebase
@@ -59,38 +65,41 @@ async function loadFromFirebase(key) {
     }
 }
 
-// פונקציה לאיפוס שבועי
-async function resetWeekly() {
+// פונקציה לבדיקה אם יש לאפס את הכרטיסייה ביום ראשון
+async function checkResetConditions() {
     const now = new Date();
     const currentDay = now.getDay(); // יום ראשון = 0
 
     // בדיקה אם היום הוא יום ראשון ואם כבר בוצע איפוס היום
     if (currentDay === 0 && (!lastResetDate || new Date(lastResetDate).toDateString() !== now.toDateString())) {
-        remainingOrders = await loadFromFirebase('maxOrders') || 3;
-        currentSpent = 0;
-
-        await saveToFirebase('remainingOrders', remainingOrders);
-        await saveToFirebase('currentSpent', currentSpent);
-        await saveToFirebase('lastResetDate', now.toDateString());
-
-        alert("הכרטיסייה התחדשה לשבוע חדש!");
+        await resetWeekly();
     }
+}
+
+// פונקציה לאיפוס שבועי
+async function resetWeekly() {
+    remainingOrders = await loadFromFirebase('maxOrders') || 3;
+    currentSpent = 0;
+
+    await saveToFirebase('remainingOrders', remainingOrders);
+    await saveToFirebase('currentSpent', currentSpent);
+    await saveToFirebase('lastResetDate', new Date().toDateString());
+
+    alert("הכרטיסייה התחדשה לשבוע חדש!");
+}
+
+// פונקציה לשימוש ידני באיפוס דרך ההגדרות
+window.manualReset = async function () {
+    await resetWeekly();
+    alert('הכרטיסייה אופסה בהצלחה!');
+    window.location.reload();
 }
 
 // טעינת כפתורים מה-Firebase
 async function loadButtons() {
     const buttons = await loadFromFirebase('buttons') || [];
-    buttonsContainer.innerHTML = ''; // נקה את התוכן הקיים
-
-    buttons.forEach(button => {
-        const orderButton = document.createElement('button');
-        orderButton.className = 'order-button';
-        orderButton.textContent = button.label;
-        orderButton.onclick = () => openModal(button.label);
-        buttonsContainer.appendChild(orderButton);
-    });
+    renderButtons(buttons);
 }
-
 
 // הצגת הכפתורים בעמוד
 function renderButtons(buttons) {
@@ -105,7 +114,7 @@ function renderButtons(buttons) {
     });
 }
 
-// פונקציה לעדכון התצוגה של מספר הניקובים, התקציב ובר ההתקדמות
+// פונקציה לעדכון התצוגה
 function updateDisplay() {
     document.getElementById('remaining-count').textContent = remainingOrders;
     document.getElementById('weekly-budget-display').textContent = weeklyBudget.toFixed(2);
@@ -119,11 +128,10 @@ function updateDisplay() {
 function updateProgressBar() {
     const percentage = (currentSpent / weeklyBudget) * 100;
     progressBarFill.style.width = `${Math.min(percentage, 100)}%`;
-
-    progressBarFill.style.backgroundColor = currentSpent > weeklyBudget ? 'red' : '#4CAF50';
+    progressBarFill.style.backgroundColor = currentSpent > weeklyBudget ? 'red' : '#00B6DB';
 }
 
-// פונקציה לשמירת היסטוריית הזמנה ב-Firebase
+// פונקציה לשמירת היסטוריית הזמנה
 async function saveOrderHistory(orderType, amount) {
     const history = await loadFromFirebase('orderHistory') || [];
     const newEntry = {
@@ -134,6 +142,7 @@ async function saveOrderHistory(orderType, amount) {
     history.push(newEntry);
     await saveToFirebase('orderHistory', history);
 }
+
 // פונקציות לפתיחת וסגירת מודאל
 window.openModal = function (type) {
     const modalTitle = document.getElementById('modal-title');
@@ -141,17 +150,18 @@ window.openModal = function (type) {
 
     if (modal && modalTitle) {
         modalTitle.textContent = `הזמנה ${type}`;
-        modal.classList.add('active'); // הוספת מחלקה 'active'
+        modal.classList.add('active');
     }
 };
 
 window.closeModal = function () {
     const modal = document.getElementById('modal');
     if (modal) {
-        modal.classList.remove('active'); // הסרת מחלקה 'active'
+        modal.classList.remove('active');
         document.getElementById('order-amount').value = '';
     }
-}
+};
+
 // פונקציה לביצוע הזמנה
 window.submitOrder = async function () {
     const amount = parseFloat(document.getElementById('order-amount').value);
@@ -159,14 +169,38 @@ window.submitOrder = async function () {
 
     if (isNaN(amount) || amount <= 0) return;
 
-    remainingOrders--;
-    currentSpent += amount;
+    // בדיקה אם נותרו ניקובים
+    if (remainingOrders > 0) {
+        remainingOrders--;
+        currentSpent += amount;
 
-    await saveToFirebase('remainingOrders', remainingOrders);
-    await saveToFirebase('currentSpent', currentSpent);
+        await saveToFirebase('remainingOrders', remainingOrders);
+        await saveToFirebase('currentSpent', currentSpent);
+        await saveOrderHistory(orderType, amount);
 
-    await saveOrderHistory(orderType, amount);
-
-    updateDisplay();
-    closeModal();
+        updateDisplay();
+        closeModal();
+    } else {
+        alert("אין ניקובים נוספים לשבוע זה.");
+        closeModal();
+    }
 };
+
+// פונקציה לעדכון תאריך ושעה
+function updateDateTime() {
+    const now = new Date();
+    
+    // עיצוב התאריך
+    const dateOptions = { weekday: 'long', day: 'numeric', month: 'long', year: 'numeric' };
+    const formattedDate = now.toLocaleDateString('he-IL', dateOptions);
+    
+    // עיצוב השעה
+    const formattedTime = now.toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' });
+    
+    document.getElementById('current-date').textContent = ` ${formattedDate}`;
+    document.getElementById('current-time').textContent = ` ${formattedTime}`;
+}
+
+// קריאה לפונקציה כל דקה (60,000 מילי-שניות) לעדכון השעה
+setInterval(updateDateTime, 1000);
+updateDateTime();
