@@ -164,12 +164,12 @@ button:hover {
     }
 
     .order-button {
-        font-size: 3rem;
+        font-size: 20px;
         padding: 25px;
     }
 
     .navbar a {
-        font-size: 2rem;
+        font-size: 20px;
     }
 
     .modal-content {
@@ -194,7 +194,7 @@ button:hover {
     }
 
     .order-button {
-        font-size: 2.8rem;
+        font-size: 16px;
         padding: 20px;
     }
 
@@ -205,12 +205,12 @@ button:hover {
     }
 
     input[type="number"] {
-        font-size: 1.8rem;
+        font-size: 16px;
         padding: 10px;
     }
 
     button {
-        font-size: 2rem;
+        font-size: 16px;
         padding: 10px;
     }
 
