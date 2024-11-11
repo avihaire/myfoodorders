@@ -244,6 +244,8 @@ button:hover {
 #history-table {
     width: 100%;
     border-collapse: collapse;
+    font-size: 14px; /* גודל פונט מותאם למובייל */
+
     margin-top: 20px;
     margin-bottom: 20px; /* רווח מתחת לטבלה */
 }
