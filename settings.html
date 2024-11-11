@@ -2,7 +2,7 @@
 <html lang="he">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no, initial-scale=1.0, maximum-scale=1.0">
     <title>הגדרות כרטיסיה</title>
     <link rel="stylesheet" href="style.css">
     
@@ -23,16 +23,17 @@
 
         <label for="max-orders">כמות הזמנות שבועיות:</label>
         <input type="number" id="max-orders" min="1" value="3">
-        <button onclick="saveMaxOrders()">שמור</button>
-
+        <button class="button" onclick="saveMaxOrders()">שמור</button>
+        
         <h2>הגדרת סכום שבועי</h2>
         <label for="weekly-budget">סכום שבועי בשקלים:</label>
         <input type="number" id="weekly-budget" min="0" value="0">
-        <button onclick="saveWeeklyBudget()">שמור סכום שבועי</button>
-
+        <button class="button" onclick="saveWeeklyBudget()">שמור סכום שבועי</button>
+        
         <h2>עריכת כפתורים:</h2>
         <div id="buttons-container"></div>
-        <button onclick="addNewButton()">הוסף כפתור חדש</button>
+        <button class="button" onclick="addNewButton()">הוסף כפתור חדש</button>
+        
     </div>
     <script src="settings.js"></script>
 </body>

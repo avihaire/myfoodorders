@@ -80,8 +80,17 @@ async function resetWeekly() {
 // טעינת כפתורים מה-Firebase
 async function loadButtons() {
     const buttons = await loadFromFirebase('buttons') || [];
-    renderButtons(buttons);
+    buttonsContainer.innerHTML = ''; // נקה את התוכן הקיים
+
+    buttons.forEach(button => {
+        const orderButton = document.createElement('button');
+        orderButton.className = 'order-button';
+        orderButton.textContent = button.label;
+        orderButton.onclick = () => openModal(button.label);
+        buttonsContainer.appendChild(orderButton);
+    });
 }
+
 
 // הצגת הכפתורים בעמוד
 function renderButtons(buttons) {
