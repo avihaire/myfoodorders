@@ -16,25 +16,44 @@ if (!firebase.apps.length) {
 
 const db = firebase.firestore();
 
-document.addEventListener('DOMContentLoaded', loadHistory);
+// קריאה לפונקציה בעת טעינת העמוד
+document.addEventListener('DOMContentLoaded', loadOrderHistory);
 
-// טעינת ההיסטוריה מה-Firebase והצגתה בטבלה
-async function loadHistory() {
+// פונקציה להצגת היסטוריית הזמנות
+async function loadOrderHistory() {
     const history = await loadFromFirebase('orderHistory') || [];
-    const table = document.getElementById('history-table');
-
-    table.innerHTML = `
+    const historyTable = document.getElementById('history-table');
+    
+    // נקה את הטבלה והוסף כותרות
+    historyTable.innerHTML = `
         <tr>
             <th>תאריך</th>
+            <th>שעה</th>
             <th>סוג הזמנה</th>
             <th>סכום</th>
+            <th>תיאור</th>
         </tr>
     `;
 
+    // בדוק אם ההיסטוריה ריקה
+    if (history.length === 0) {
+        const row = document.createElement('tr');
+        row.innerHTML = `<td colspan="5" style="text-align: center;">אין היסטוריית הזמנות</td>`;
+        historyTable.appendChild(row);
+        return;
+    }
+
+    // עבור על כל רשומה בהיסטוריה והוסף לטבלה
     history.forEach(entry => {
         const row = document.createElement('tr');
-        row.innerHTML = `<td>${entry.date}</td><td>${entry.type}</td><td>${entry.amount} ₪</td>`;
-        table.appendChild(row);
+        row.innerHTML = `
+            <td>${entry.date || ''}</td>
+            <td>${entry.time || ''}</td>
+            <td>${entry.type || ''}</td>
+            <td>${entry.amount ? entry.amount.toFixed(2) + ' ₪' : ''}</td>
+            <td>${entry.description || ''}</td>
+        `;
+        historyTable.appendChild(row);
     });
 }
 

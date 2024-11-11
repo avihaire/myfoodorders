@@ -132,16 +132,19 @@ function updateProgressBar() {
 }
 
 // פונקציה לשמירת היסטוריית הזמנה
-async function saveOrderHistory(orderType, amount) {
+async function saveOrderHistory(orderType, amount, description) {
     const history = await loadFromFirebase('orderHistory') || [];
     const newEntry = {
         type: orderType,
         amount: amount,
-        date: new Date().toLocaleDateString('he-IL')
+        description: description,
+        date: new Date().toLocaleDateString('he-IL'),
+        time: new Date().toLocaleTimeString('he-IL')
     };
     history.push(newEntry);
     await saveToFirebase('orderHistory', history);
 }
+
 
 // פונקציות לפתיחת וסגירת מודאל
 window.openModal = function (type) {
@@ -159,15 +162,21 @@ window.closeModal = function () {
     if (modal) {
         modal.classList.remove('active');
         document.getElementById('order-amount').value = '';
+        document.getElementById('order-description').value = '';
+
     }
 };
 
 // פונקציה לביצוע הזמנה
 window.submitOrder = async function () {
     const amount = parseFloat(document.getElementById('order-amount').value);
+    const description = document.getElementById('order-description').value.trim();
     const orderType = document.getElementById('modal-title').textContent;
 
-    if (isNaN(amount) || amount <= 0) return;
+    if (isNaN(amount) || amount <= 0 || description === '') {
+        alert("נא להזין סכום תקין ותיאור ההזמנה");
+        return;
+    }
 
     // בדיקה אם נותרו ניקובים
     if (remainingOrders > 0) {
@@ -176,7 +185,9 @@ window.submitOrder = async function () {
 
         await saveToFirebase('remainingOrders', remainingOrders);
         await saveToFirebase('currentSpent', currentSpent);
-        await saveOrderHistory(orderType, amount);
+
+        // שמירת ההזמנה בהיסטוריה
+        await saveOrderHistory(orderType, amount, description);
 
         updateDisplay();
         closeModal();
@@ -185,6 +196,7 @@ window.submitOrder = async function () {
         closeModal();
     }
 };
+
 
 // פונקציה לעדכון תאריך ושעה
 function updateDateTime() {

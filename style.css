@@ -145,29 +145,33 @@ p {
     border: 2px solid #00B6DB;
     border-radius: 15px;
     width: 90%;
-    max-width: 350px;
+    max-width: 400px;
     box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     text-align: center;
+    position: relative; /* וודא שהכפתור X מוצמד לחלון המודאל */
 }
 
-input[type="number"] {
+.modal-content input {
     width: 100%;
     max-width: 100%;
     box-sizing: border-box;
     padding: 12px;
     margin: 15px 0;
     border: 1px solid #ccc;
-    border-radius: 10px;
+    border-radius: 8px;
     font-size: 16px;
 }
 
+/* עיצוב כפתור הסגירה (X) */
 .close {
-    color: #FF6B6B;
-    font-size: 24px;
-    cursor: pointer;
     position: absolute;
     top: 10px;
     right: 15px;
+    color: #FF6B6B;
+    font-size: 24px;
+    cursor: pointer;
+    transition: color 0.3s ease;
+    z-index: 10; /* וודא שהכפתור תמיד למעלה */
 }
 
 .close:hover {
@@ -223,10 +227,6 @@ button:hover {
         padding: 10px 15px;
     }
 
-    .modal-content {
-        width: 95%;
-        padding: 20px;
-    }
 
     input[type="number"],
     #buttons-container input[type="text"] {
@@ -398,3 +398,12 @@ button:hover {
     }
 }
 
+#modal input[type="number"],
+#modal input[type="text"] {
+    width: 100%;
+    padding: 12px;
+    margin: 10px 0;
+    border: 1px solid #ddd;
+    border-radius: 8px;
+    font-size: 16px;
+}
