@@ -1,11 +1,18 @@
-/* CSS מותאם למובייל בלבד */
+/* ייבוא של פונט Open Sans */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&display=swap');
+
+/* ייבוא של פונטים Open Sans ו-Assistant Bold */
+@import url('https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;600&family=Assistant:wght@700&display=swap');
+
+
+
 body {
     margin: 0;
     padding: 0;
-    font-family: Arial, sans-serif;
-    background-color: #f0f0f0;
+    font-family: 'Open Sans', sans-serif;
+    background-color: #F8F9FA;
     direction: rtl;
-    font-size: 16px; /* גודל בסיס */
+    font-size: 16px;
     overflow-x: hidden;
 }
 
@@ -14,8 +21,8 @@ body {
     display: flex;
     justify-content: center;
     align-items: center;
-    background-color: #4CAF50;
-    padding: 10px;
+    background-color: #00B6DB; /* צבע Wolt */
+    padding: 15px;
     width: 100%;
     position: sticky;
     top: 0;
@@ -27,13 +34,13 @@ body {
     margin: 10px;
     text-decoration: none;
     color: white;
-    font-weight: bold;
+    font-weight: 600;
     font-size: 16px;
     transition: color 0.3s;
 }
 
 .navbar a:hover {
-    color: #f0f0f0;
+    color: #F0F0F0;
 }
 
 /* מיכל התוכן */
@@ -45,59 +52,70 @@ body {
     padding: 20px;
     margin: 10px;
     background-color: #ffffff;
-    border-radius: 10px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    border-radius: 15px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.1);
 }
 
 h1 {
-    font-size: 18px;
+    font-size: 24px;
+    color: #00B6DB;
     margin-bottom: 20px;
 }
 
 /* פרטי הכרטיסייה */
 p {
     margin: 10px 0;
-    font-size: 16px;
+    font-size: 18px;
+    color: #333;
     text-align: center;
+}
+
+.bold-number {
+    font-weight: bold;
+    color: #472aa5;
 }
 
 /* בר התקדמות */
 .progress-bar {
     width: 90%;
     height: 25px;
-    background-color: #e0e0e0;
-    border-radius: 12px;
+    background-color: #E0E0E0;
+    border-radius: 15px;
     overflow: hidden;
     margin: 20px 0;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1); /* הוספת צל לבר */
+
 }
 
 #progress-fill {
     height: 100%;
     width: 0;
-    background-color: #4CAF50;
+    background-color: #00B6DB; /* צבע Wolt */
     transition: width 0.5s ease;
 }
 
 .order-button {
-    display: inline-flex; /* התאמה לאורך הטקסט */
+    display: inline-flex;
     align-items: center;
     justify-content: center;
-    background-color: #4CAF50;
-    color: white;
+    background-color: #00B6DB; /* צבע Wolt */
+    color: #FFF;
     border: none;
-    border-radius: 12px;
+    border-radius: 15px;
     cursor: pointer;
     font-size: 16px;
     text-align: center;
     transition: background-color 0.3s ease;
-    padding: 10px 15px; /* מרווח פנימי נעים */
-    margin: 5px; /* רווח בין כפתורים */
-    white-space: nowrap; /* כדי למנוע שבירת שורות */
-    height: auto; /* גובה דינמי */
-    width: auto; /* התאמה לגודל הטקסט */
-    min-width: 80px; /* רוחב מינימלי */
+    padding: 12px 20px;
+    margin: 5px;
+    white-space: nowrap;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* הוספת צל */
+
 }
 
+.order-button:hover {
+    background-color: #00B8A3; /* גוון כהה יותר של Wolt */
+}
 
 /* סגנונות לחלון קופץ (modal) */
 .modal {
@@ -119,29 +137,29 @@ p {
 
 .modal-content {
     background-color: #ffffff;
-    padding: 20px;
-    border: 1px solid #888;
-    border-radius: 12px;
+    padding: 30px;
+    border: 2px solid #00B6DB;
+    border-radius: 15px;
     width: 90%;
-    max-width: 400px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+    max-width: 350px;
+    box-shadow: 0 6px 12px rgba(0, 0, 0, 0.2);
     text-align: center;
 }
 
 input[type="number"] {
     width: 100%;
     max-width: 100%;
-    box-sizing: border-box; /* כדי לוודא שהשדה לא יחרוג */
+    box-sizing: border-box;
     padding: 12px;
     margin: 15px 0;
     border: 1px solid #ccc;
-    border-radius: 8px;
+    border-radius: 10px;
     font-size: 16px;
 }
 
 .close {
-    color: #aaa;
-    font-size: 20px;
+    color: #FF6B6B;
+    font-size: 24px;
     cursor: pointer;
     position: absolute;
     top: 10px;
@@ -152,19 +170,24 @@ input[type="number"] {
     color: #000;
 }
 
-input[type="number"] {
-    width: 100%;
-    padding: 12px;
-    margin: 15px 0;
-    border: 1px solid #ccc;
-    border-radius: 8px;
+button {
+    display: inline-block;
+    padding: 12px 20px;
+    background-color: #00B6DB;
+    color: white;
+    border: none;
+    border-radius: 12px;
     font-size: 16px;
+    cursor: pointer;
+    margin-top: 10px;
+    text-align: center;
+    transition: background-color 0.3s ease;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15); /* הוספת צל */
+
 }
 
-
-
 button:hover {
-    background-color: #45a049;
+    background-color: #00B8A3;
 }
 
 /* עיצוב כפתורי הזמנה */
@@ -172,39 +195,68 @@ button:hover {
     display: flex;
     flex-wrap: wrap;
     justify-content: center;
-    align-items: center;
     gap: 10px;
     margin-top: 20px;
 }
 
-.bold-number {
-    font-weight: bold;
-    color: #000;
-}
-
-button {
-    display: inline-block;
-    padding: 10px 20px;
-    background-color: #4CAF50;
-    color: white;
-    border: none;
-    border-radius: 8px;
-    font-size: 16px;
-    cursor: pointer;
-    margin: 10px;
-    text-align: center;
-    transition: background-color 0.3s ease;
-    white-space: nowrap; /* כדי למנוע שבירת שורות */
-}
-
-/* עיצוב השדה להזנת שם הכפתור */
 #buttons-container input[type="text"] {
-    width: 100%;
-    max-width: 300px; /* ניתן לשנות את הערך הזה בהתאם לצורך */
+    width: 80%;
     padding: 10px;
     margin: 10px 0;
-    border: 1px solid #ccc;
+    border: 1px solid #ddd;
     border-radius: 8px;
     font-size: 16px;
-    box-sizing: border-box; /* כדי למנוע גלישה של השדה */
+}
+
+/* התאמות מובייל */
+@media (max-width: 480px) {
+    h1 {
+        font-size: 20px;
+    }
+
+    .order-button {
+        font-size: 14px;
+        padding: 10px 15px;
+    }
+
+    .modal-content {
+        width: 95%;
+        padding: 20px;
+    }
+
+    input[type="number"],
+    #buttons-container input[type="text"] {
+        font-size: 14px;
+        padding: 10px;
+    }
+
+    button {
+        font-size: 14px;
+        padding: 10px;
+    }
+}
+
+/* סגנון לטבלה */
+#history-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+    margin-bottom: 20px; /* רווח מתחת לטבלה */
+}
+
+#history-table th,
+#history-table td {
+    padding: 15px; /* רווח פנימי לתאים */
+    text-align: center;
+    border-bottom: 1px solid #ddd; /* קו תחתון לתאים */
+}
+
+#history-table th {
+    background-color: #00B6DB; /* צבע Wolt */
+    color: white;
+    font-weight: bold;
+}
+
+#history-table tr:nth-child(even) {
+    background-color: #f9f9f9;
 }
