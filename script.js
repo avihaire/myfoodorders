@@ -139,7 +139,7 @@ async function saveOrderHistory(orderType, amount, description) {
         amount: amount,
         description: description,
         date: new Date().toLocaleDateString('he-IL'),
-        time: new Date().toLocaleTimeString('he-IL')
+        time: new Date().toLocaleTimeString('he-IL', { hour: '2-digit', minute: '2-digit' })
     };
     history.push(newEntry);
     await saveToFirebase('orderHistory', history);
