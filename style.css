@@ -23,11 +23,13 @@ body {
     align-items: center;
     background-color: #00B6DB; /* צבע Wolt */
     padding: 15px;
-    width: 100%;
+    width: 100vw; /* עדכון כאן מ-100% ל-100vw */
+    box-sizing: border-box; /* כדי לוודא שאין גלילה אופקית */
     position: sticky;
     top: 0;
     z-index: 1000;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    overflow: hidden;
 }
 
 .navbar a {
