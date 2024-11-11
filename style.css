@@ -245,14 +245,13 @@ button:hover {
     width: 100%;
     border-collapse: collapse;
     font-size: 14px; /* גודל פונט מותאם למובייל */
-
     margin-top: 20px;
     margin-bottom: 20px; /* רווח מתחת לטבלה */
 }
 
 #history-table th,
 #history-table td {
-    padding: 15px; /* רווח פנימי לתאים */
+    padding: 12px; /* רווח פנימי לתאים */
     text-align: center;
     border-bottom: 1px solid #ddd; /* קו תחתון לתאים */
 }
@@ -261,6 +260,14 @@ button:hover {
     background-color: #00B6DB; /* צבע Wolt */
     color: white;
     font-weight: bold;
+}
+/* פינות מעוגלות לשני התאים הראשונים והאחרונים */
+#history-table th:first-child {
+    border-top-right-radius: 12px;
+}
+
+#history-table th:last-child {
+    border-top-left-radius: 12px;
 }
 
 #history-table tr:nth-child(even) {
