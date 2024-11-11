@@ -264,6 +264,14 @@ button:hover {
 #history-table tr:nth-child(even) {
     background-color: #f9f9f9;
 }
+
+@media (max-width: 480px) {
+    #history-table th, 
+    #history-table td {
+        padding: 2px 2px; /* צמצום נוסף של הרווחים במובייל */
+    }
+}
+
 /* עיצוב מגניב לתאריך ולשעה */
 .date-time-container {
     display: flex;
